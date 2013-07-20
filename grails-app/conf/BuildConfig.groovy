@@ -1,5 +1,4 @@
 grails.project.work.dir = 'target'
-grails.project.source.level = 1.6
 grails.project.docs.output.dir = 'docs/manual' // for backwards-compatibility, the docs are checked into gh-pages branch
 
 grails.project.dependency.resolution = {
@@ -14,32 +13,37 @@ grails.project.dependency.resolution = {
 	}
 
 	dependencies {
-		runtime('org.hdiv:hdiv-core:2.1.2') {
+
+		String hdivVersion = '2.1.4'
+
+		compile "org.hdiv:hdiv-core:$hdivVersion", {
 			excludes 'commons-codec', 'commons-fileupload', 'commons-logging', 'junit',
 			         'servlet-api', 'spring-test', 'spring-web'
 		}
 
-		runtime('org.hdiv:hdiv-spring-mvc:2.1.2') {
+		compile "org.hdiv:hdiv-spring-mvc:$hdivVersion", {
 			excludes 'commons-logging', 'hdiv-core', 'jsp-api', 'junit',
 			         'servlet-api', 'spring-test', 'spring-webmvc'
 		}
 
-		runtime('org.hdiv:hdiv-config:2.1.2') {
+		compile "org.hdiv:hdiv-config:$hdivVersion", {
 			excludes 'commons-logging', 'hdiv-core', 'hdiv-spring-mvc', 'junit',
-						'spring-test', 'spring-web'
+			         'spring-test', 'spring-web'
 		}
 
 		runtime 'javax.servlet.jsp:jsp-api:2.1'
-		runtime('javax.servlet:jstl:1.2') {
+		runtime 'javax.servlet:jstl:1.2', {
 			excludes 'jsp-api'
 		}
-		runtime('org.hdiv:hdiv-jstl-taglibs-1.2:2.1.2') {
+		compile "org.hdiv:hdiv-jstl-taglibs-1.2:$hdivVersion", {
 			excludes 'commons-logging', 'hdiv-core', 'jsp-api', 'jstl', 'junit', 'servlet-api'
 		}
+
+		compile 'taglibs:standard:1.1.2'
 	}
 
 	plugins {
-		build(':release:2.0.4', ':rest-client-builder:1.0.2') {
+		build ':release:2.2.1', ':rest-client-builder:1.0.3', {
 			export = false
 		}
 	}

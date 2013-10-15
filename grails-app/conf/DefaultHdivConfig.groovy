@@ -19,6 +19,9 @@ hdiv {
 		startPages = ''
 		startParameters = ''
 		paramsWithoutValidation = []
+		showErrorPageOnEditableValidation = false
+		sessionExpiredLoginPage = ''
+		sessionExpiredHomePage = ''
 	}
 
 	validations = []

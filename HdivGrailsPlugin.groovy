@@ -65,18 +65,8 @@ class HdivGrailsPlugin {
 			}
 		}
 	}
-		
+
 	def doWithSpring = {
-
-		hdivEditableValidator(GrailsEditableParameterValidator)
-
-		hdivFilter(ValidatorFilter)
-
-		if (!application.config.grails.disableCommonsMultipart) {
-			multipartResolver(HdivCommonsMultipartResolver) {
-				maxUploadSize = 100000
-			}
-		}
 
 		def hdivConfig = HdivUtils.getConfig(application)
 
@@ -94,9 +84,38 @@ class HdivGrailsPlugin {
 		            protectedExtensions:                hdivConfig.config.protectedExtensions, // '.*'
 		            randomName:                         hdivConfig.config.randomName.toString(), // false
 		            strategy:                           hdivConfig.config.strategy, // memory
-		            userData:                           hdivConfig.config.userData) { // ''
-			startPages(hdivConfig.config.startPages)
-			if (hdivConfig.config.startParameters) startParameters(hdivConfig.config.startParameters)
+		            userData:                           hdivConfig.config.userData, // ''
+		            showErrorPageOnEditableValidation:  hdivConfig.config.showErrorPageOnEditableValidation) { // false
+
+			def startPageConfig = hdivConfig.config.startPages
+			if (startPageConfig instanceof CharSequence) {
+				startPageConfig = [ANY: startPageConfig.toString()]
+			}
+			else if (startPageConfig instanceof Map) {
+				startPageConfig = [:] + startPageConfig
+			}
+			else {
+				// TODO
+			}
+
+			if (hdivConfig.config.sessionExpiredLoginPage || hdivConfig.config.sessionExpiredHomePage) {
+				sessionExpired(loginPage: hdivConfig.config.sessionExpiredLoginPage ?: '', homePage: hdivConfig.config.sessionExpiredHomePage ?: '')
+			}
+
+			startPageConfig.each { method, pages ->
+				if (pages && method) {
+					if ('ANY'.equalsIgnoreCase(method)) {
+						startPages(pages.toString())
+					}
+					else {
+						startPages(pages.toString(), method: method.toUpperCase())
+					}
+				}
+			}
+
+			if (hdivConfig.config.startParameters) {
+				startParameters(hdivConfig.config.startParameters)
+			}
 			paramsWithoutValidation {
 				hdivConfig.config.paramsWithoutValidation.each { pwv ->
 					mapping(url: pwv.url, parameters: pwv.parameters)
@@ -128,6 +147,16 @@ class HdivGrailsPlugin {
 				for (rule in editableValidation.validationRules) {
 					validationRule(url: rule.url, enableDefaults: toBoolean(rule.enableDefaults).toString(), rule.validationIds)
 				}
+			}
+		}
+
+		hdivEditableValidator(GrailsEditableParameterValidator)
+
+		hdivFilter(ValidatorFilter)
+
+		if (!application.config.grails.disableCommonsMultipart) {
+			multipartResolver(HdivCommonsMultipartResolver) {
+				maxUploadSize = 100000
 			}
 		}
 	}

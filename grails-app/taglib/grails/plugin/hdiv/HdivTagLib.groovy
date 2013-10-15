@@ -3,11 +3,10 @@ package grails.plugin.hdiv
 import javax.servlet.jsp.JspTagException
 import javax.servlet.jsp.JspException
 import javax.servlet.jsp.JspTagException
-import javax.servlet.jsp.PageContext
 
 import org.apache.taglibs.standard.resources.Resources
 import org.apache.taglibs.standard.tag.common.core.ImportSupport
-import org.apache.taglibs.standard.tag.common.core.UrlSupport
+import org.apache.taglibs.standard.tag.common.core.ParamSupport
 import org.apache.taglibs.standard.tag.common.core.ParamSupport.ParamManager
 import org.hdiv.dataComposer.IDataComposer
 import org.hdiv.util.HDIVUtil
@@ -52,7 +51,7 @@ class HdivTagLib {
 		String url = attrsCopy.remove('url')
 		String context = attrsCopy.remove('context')
 
-		String baseUrl = UrlSupport.resolveUrl(url, context)
+		String baseUrl = resolveUrl(url, context)
 		String result = aggregateParams(baseUrl, attrsCopy)
 
 		// if the URL is relative, rewrite it with 'redirect' encoding rules

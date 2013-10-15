@@ -1,6 +1,8 @@
 *.log
 /target
 /docs
-/*.zip
-/plugin.xml
-.settings/
+grails-hdiv-*.zip
+grails-hdiv-*.zip.sha1
+plugin.xml
+.settings
+web-app

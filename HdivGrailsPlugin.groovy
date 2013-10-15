@@ -1,11 +1,11 @@
+import grails.plugin.hdiv.GrailsEditableParameterValidator
 import grails.plugin.hdiv.HdivUtils
 import grails.plugin.webxml.FilterManager
-import grails.util.Metadata
 
+import org.codehaus.groovy.grails.web.context.GrailsContextLoaderListener
 import org.hdiv.filter.ValidatorFilter
 import org.hdiv.listener.InitListener
 import org.hdiv.web.multipart.HdivCommonsMultipartResolver
-import org.hdiv.web.validator.EditableParameterValidator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.filter.DelegatingFilterProxy
@@ -15,7 +15,7 @@ class HdivGrailsPlugin {
 	private Logger log = LoggerFactory.getLogger(getClass())
 
 	String version = '0.1'
-	String grailsVersion = '2.3 > *'
+	String grailsVersion = '2.3.1 > *'
 	String title = 'HDIV Plugin'
 	String author = 'Burt Beckwith'
 	String authorEmail = 'beckwithb@vmware.com'
@@ -68,7 +68,7 @@ class HdivGrailsPlugin {
 		
 	def doWithSpring = {
 
-		dataBindingValidator(EditableParameterValidator)
+		hdivEditableValidator(GrailsEditableParameterValidator)
 
 		hdivFilter(ValidatorFilter)
 

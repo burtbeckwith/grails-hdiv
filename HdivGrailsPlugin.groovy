@@ -1,4 +1,5 @@
 import grails.plugin.hdiv.HdivUtils
+import grails.plugin.webxml.FilterManager
 import grails.util.Metadata
 
 import org.hdiv.filter.ValidatorFilter
@@ -31,7 +32,6 @@ class HdivGrailsPlugin {
 	def scm = [url: 'https://github.com/burtbeckwith/grails-hdiv']
 
 	def getWebXmlFilterOrder() {
-		def FilterManager = getClass().getClassLoader().loadClass('grails.plugin.webxml.FilterManager')
 		[ValidatorFilter: FilterManager.GRAILS_WEB_REQUEST_POSITION - 100]
 	}
 
@@ -42,7 +42,7 @@ class HdivGrailsPlugin {
 		def contextParam = xml.'context-param'
 
 		contextParam[contextParam.size() - 1] + {
-			'filter' {
+			filter {
 				'filter-name'('hdivFilter')
 				'filter-class'(DelegatingFilterProxy.name)
 			}
@@ -58,21 +58,15 @@ class HdivGrailsPlugin {
 			}
 		}
 
-		def filterMapping = xml.'filter-mapping'
-		filterMapping[filterMapping.size() - 1] + {
-			'listener' {
+		def listenerLocation = xml.'listener'.find { it.'listener-class'.text() == GrailsContextLoaderListener.name }
+		listenerLocation + {
+			listener {
 				'listener-class'(InitListener.name)
 			}
 		}
 	}
-
+		
 	def doWithSpring = {
-
-		// do the check here instead of doWithWebDescriptor to get more obvious error display
-		if (Metadata.current.getApplicationName() && !manager.hasGrailsPlugin('webxml')) {
-			throw new IllegalStateException(
-				'The HDIV plugin requires that the webxml plugin be installed')
-		}
 
 		dataBindingValidator(EditableParameterValidator)
 

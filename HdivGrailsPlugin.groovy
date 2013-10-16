@@ -16,7 +16,7 @@ class HdivGrailsPlugin {
 
 	private Logger log = LoggerFactory.getLogger(getClass())
 
-	String version = '0.1'
+	String version = '1.0-RC1'
 	String grailsVersion = '2.3.1 > *'
 	String title = 'HDIV Plugin'
 	String author = 'Burt Beckwith'

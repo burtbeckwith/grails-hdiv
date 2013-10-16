@@ -2,10 +2,12 @@ import grails.plugin.hdiv.GrailsEditableParameterValidator
 import grails.plugin.hdiv.HdivUtils
 import grails.plugin.webxml.FilterManager
 
+import org.codehaus.groovy.grails.validation.ConstrainedProperty
 import org.codehaus.groovy.grails.web.context.GrailsContextLoaderListener
 import org.hdiv.filter.ValidatorFilter
 import org.hdiv.listener.InitListener
 import org.hdiv.web.multipart.HdivCommonsMultipartResolver
+import org.hdiv.web.validator.GrailsEditableParameterValidatorConstraint
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.filter.DelegatingFilterProxy
@@ -67,6 +69,8 @@ class HdivGrailsPlugin {
 	}
 
 	def doWithSpring = {
+
+		ConstrainedProperty.registerNewConstraint GrailsEditableParameterValidatorConstraint.NAME, GrailsEditableParameterValidatorConstraint
 
 		def hdivConfig = HdivUtils.getConfig(application)
 
